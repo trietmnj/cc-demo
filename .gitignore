@@ -10,6 +10,7 @@ env_files/*
 .ssh/
 .vscode-server/
 .dotnet/
+.vscode/
 
 # Plugin folder user-specific files and caches
 plugin/.cache/
