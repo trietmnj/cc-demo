@@ -55,3 +55,13 @@ chmod u+x compose.sh
 ```bash
 ./compose.sh plugin-up
 ```
+
+(Optional) Test plugin using VSCode Debugger
+
+6. Run the plugin in interactive mode
+
+```bash
+./compose.sh plugin-it-up
+```
+
+7. Connect VSCode to the container `Dev Containers: Attach to Running Container...`
