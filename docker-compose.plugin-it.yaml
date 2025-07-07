@@ -9,6 +9,8 @@ services:
     env_file: env_files/plugin.local.env
     working_dir: /root
     volumes:
-      - ./plugin:/root
+      - .:/root
       - ../cc-py-sdk/src/cc:/root/cc
-    command: ["python", "main.py"]  # Replace with your app entry
+    stdin_open: true
+    tty: true
+    command: ["/bin/bash"]
