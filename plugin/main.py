@@ -7,22 +7,7 @@ import cc.plugin_manager as manager
 dataSourceName = "TestFile"
 dataSourcePath = "default"
 
-CcPayloadId = "CC_PAYLOAD_ID"
-CcManifestId = "CC_MANIFEST_ID"
-CcRootPath = "CC_ROOT"
-PAYLOAD_FILE_NAME = "payload.json"
-
 def main():
-
-    manifestId = os.environ[CcManifestId]
-    payloadId = os.environ[CcPayloadId]
-    ccRoot = os.environ[CcRootPath]
-
-    path = f"{ccRoot}/{payloadId}/{PAYLOAD_FILE_NAME}"
-
-    print(manifestId)
-    print(payloadId)
-    print(path)
 
     pm = manager.PluginManager()
 

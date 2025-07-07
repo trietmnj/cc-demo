@@ -4,20 +4,29 @@
 
 ## Workflow
 
-1. Download cc-python-plugin package from github/USACE.
-    This is will be the base image, not your customized plugin.
+1. Clone cc-py-sdk from USACE so that it will be in the same directory as this repo.
+    This local version will allow developing on both the SDK and plugin.
 
-```bash
-docker pull ghcr.io/usace/cc-python-plugin:latest
+```graphql
+parent-folder/
+├── cc-plugin-repo/           # Your current plugin repo
+│   ├── docker-compose.yaml
+│   ├── plugin/
+│   │   ├── main.py
+│   │   └── ...
+│   └── ...
+├── cc-py-sdk/                # SDK cloned from GitHub
+│   ├── cc/
+│   │   ├── plugin_manager.py
+│   │   └── ...
+│   └── ...
 ```
 
-2. Clone cc-sample-python-plugin
-
 ```bash
-git clone https://github.com/USACE/cc-sample-python-plugin
-```
+git clone https://github.com/USACE/cc-py-sdk
+````
 
-3. Add execution permission to `compose.sh`
+2. Add execution permission to `compose.sh`
 ```bash
 chmod u+x compose.sh
 ```
@@ -37,11 +46,11 @@ chmod u+x compose.sh
 - upload your sample payload into that path
    - using the same example, the object key would be `cc_store/8cf898dd-bda6-4993-87b6-f281539b26a7/payload`
 
-5. Develop system plugin in `plugin/`
+4. Develop system plugin in `plugin/` or modify the SDK in `../../cc-py-sdk/src/cc`.
 
-- The entry point must be `plugin/main.py`
+- The entry to the plugin must be `plugin/main.py`
 
-6. Test plugin using container
+5. Test plugin using container
 
 ```bash
 ./compose.sh plugin-up

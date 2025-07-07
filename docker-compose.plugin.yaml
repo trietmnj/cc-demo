@@ -10,4 +10,5 @@ services:
     working_dir: /root
     volumes:
       - ./plugin:/root
+      - ../cc-py-sdk/src/cc:/opt/cc
     command: ["python", "main.py"]  # Replace with your app entry
