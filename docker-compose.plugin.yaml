@@ -1,0 +1,13 @@
+version: "3.9"
+
+services:
+  cc-plugin:
+    build:
+      context: .
+      dockerfile: plugin/Dockerfile
+    container_name: cc-plugin
+    env_file: env_files/plugin.local.env
+    working_dir: /root
+    volumes:
+      - ./plugin:/root
+    command: ["python", "main.py"]  # Replace with your app entry

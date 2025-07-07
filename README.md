@@ -2,9 +2,10 @@
 
 ---
 
-## Setting up cloud-compute
+## Workflow
 
-1. Download cc-python-plugin package from github/USACE
+1. Download cc-python-plugin package from github/USACE.
+    This is will be the base image, not your customized plugin.
 
 ```bash
 docker pull ghcr.io/usace/cc-python-plugin:latest
@@ -16,10 +17,14 @@ docker pull ghcr.io/usace/cc-python-plugin:latest
 git clone https://github.com/USACE/cc-sample-python-plugin
 ```
 
+3. Add execution permission to `compose.sh`
+```bash
+chmod u+x compose.sh
+```
+
 3. Setup mock local s3 and mqtt services
 ```bash
-cd cc-sample-python-plugin
-docker compose up
+./compose.sh infras-up
 ```
 
 4. Setup local S3
@@ -32,4 +37,12 @@ docker compose up
 - upload your sample payload into that path
    - using the same example, the object key would be `cc_store/8cf898dd-bda6-4993-87b6-f281539b26a7/payload`
 
+5. Develop system plugin in `plugin/`
 
+- The entry point must be `plugin/main.py`
+
+6. Test plugin using container
+
+```bash
+./compose.sh plugin-up
+```
