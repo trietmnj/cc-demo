@@ -9,13 +9,13 @@
 
 ```graphql
 parent-folder/
-├── cc-plugin-repo/           # Your current plugin repo
+├── cc-demo/
 │   ├── docker-compose.yaml
 │   ├── plugin/
 │   │   ├── main.py
 │   │   └── ...
 │   └── ...
-├── cc-py-sdk/                # SDK cloned from GitHub
+├── cc-py-sdk/
 │   ├── cc/
 │   │   ├── plugin_manager.py
 │   │   └── ...
