@@ -64,4 +64,6 @@ chmod u+x compose.sh
 ./compose.sh plugin-it-up
 ```
 
-7. Connect VSCode to the container `Dev Containers: Attach to Running Container...`
+7. Connect VSCode to the container
+
+`Dev Containers: Attach to Running Container...`
