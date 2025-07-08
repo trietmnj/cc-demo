@@ -4,15 +4,15 @@ services:
   cc-plugin:
     build:
       context: .
-      dockerfile: plugin/Dockerfile
+      dockerfile: ../plugin/Dockerfile
     container_name: cc-plugin
     env_file:
-      - env_files/plugin.local.env
-      - env_files/ffrd.plugin.local.env
+      - ../env_files/plugin.local.env
+      - ../env_files/ffrd.plugin.local.env
     working_dir: /root
     volumes:
-      - .:/root
-      - ../cc-py-sdk/src/cc:/root/cc
+      - ../:/root
+      - ../../cc-py-sdk/src/cc:/root/cc
     stdin_open: true
     tty: true
     command: ["/bin/bash"]
