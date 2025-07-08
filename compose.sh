@@ -5,9 +5,9 @@ set -Eeo pipefail
 parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 cd "$parent_path"
 
-COMPOSECMD_INFRAS="docker compose -f docker-compose.infras.yaml"
-COMPOSECMD_PLUGIN="docker compose -f docker-compose.plugin.yaml"
-COMPOSECMD_PLUGIN_IT="docker compose -f docker-compose.plugin-it.yaml"
+COMPOSECMD_INFRAS="docker compose -f docker-compose/docker-compose.infras.yaml"
+COMPOSECMD_PLUGIN="docker compose -f docker-compose/docker-compose.plugin.yaml"
+COMPOSECMD_PLUGIN_IT="docker compose -f docker-compose/docker-compose.plugin-it.yaml"
 
 
 for arg in "$@"
@@ -16,7 +16,7 @@ do
         "up")
             shift
             detach_option=""; if [ "$1" = "-d" ]; then detach_option=$1; shift; fi
-            cmd="$COMPOSECMD_INFRAS -f docker-compose.plugin.yaml up --remove-orphans $detach_option --build $@"
+            cmd="$COMPOSECMD_INFRAS -f docker-compose/docker-compose.plugin.yaml up --remove-orphans $detach_option --build $@"
             echo -e "$cmd"
             $cmd
             ;;
@@ -43,7 +43,7 @@ do
             ;;
         "down")
             shift
-            cmd="$COMPOSECMD_INFRAS -f docker-compose.plugin.yaml -f docker-compose.plugin-it.yaml down --remove-orphans $@"
+            cmd="$COMPOSECMD_INFRAS -f docker-compose/docker-compose.plugin.yaml -f docker-compose/docker-compose.plugin-it.yaml down --remove-orphans $@"
             echo -e "$cmd"
             $cmd
             ;;
@@ -61,13 +61,13 @@ do
             ;;
         "watch")
             shift
-            cmd="$COMPOSECMD_INFRAS -f docker-compose.plugin.yaml up --remove-orphans --build --watch $@"
+            cmd="$COMPOSECMD_INFRAS -f docker-compose/docker-compose.plugin.yaml up --remove-orphans --build --watch $@"
             echo -e "$cmd"
             $cmd
             ;;
         "logs")
             shift
-            cmd="$COMPOSECMD_INFRAS -f docker-compose.plugin.yaml logs -f $@"
+            cmd="$COMPOSECMD_INFRAS -f docker-compose/docker-compose.plugin.yaml logs -f $@"
             echo -e "$cmd"
             $cmd
             ;;
@@ -80,4 +80,3 @@ do
 done
 
 exit 0
-

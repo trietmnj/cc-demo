@@ -6,7 +6,9 @@ services:
       context: .
       dockerfile: plugin/Dockerfile
     container_name: cc-plugin
-    env_file: env_files/plugin.local.env
+    env_file:
+      - env_files/plugin.local.env
+      - env_files/ffrd.plugin.local.env
     working_dir: /root
     volumes:
       - .:/root
