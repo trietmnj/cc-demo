@@ -17,3 +17,7 @@ plugin/.cache/
 plugin/.gitconfig
 plugin/.gnupg/
 plugin/.ssh/
+
+tests/*
+!tests/payload/
+!tests/ffrd/
