@@ -67,10 +67,10 @@ def main():
     pm.put(reader, "TestFileOut", "default", None)
 
     # copy a file to the local container
-    pm.copy_file_to_local(manager.DataSourceOpInput(name="TestFile", pathkey="default", datakey=None), "/data/testfile.txt")  # data source name
+    pm.copy_file_to_local(manager.DataSourceOpInput(name="TestFile", pathkey="default", datakey=None), "tests/data/testfile.txt")  # data source name
 
     # copy a local file to a remote
-    pm.copy_file_to_remote(manager.DataSourceOpInput(name="TestFileOut2", pathkey="default", datakey=None), "/data/testfile.txt")  # data source name
+    pm.copy_file_to_remote(manager.DataSourceOpInput(name="TestFileOut2", pathkey="default", datakey=None), "tests/data/testfile.txt")  # data source name
 
     # copy one data source to another
     pm.copy(
@@ -135,10 +135,10 @@ def do_stuff_with_an_action(action):
     action.put(reader, "TestFileOut", "default", None)
 
     # copy a file to the local container
-    action.copy_file_to_local(manager.DataSourceOpInput(name="TestFile", pathkey="default", datakey=None), "/data/testfile.txt")  # data source name
+    action.copy_file_to_local(manager.DataSourceOpInput(name="TestFile", pathkey="default", datakey=None), "tests/data/testfile.txt")  # data source name
 
     # copy a local file to a remote
-    action.copy_file_to_remote(manager.DataSourceOpInput(name="TestFileOut2", pathkey="default", datakey=None), "/data/testfile.txt")  # data source name
+    action.copy_file_to_remote(manager.DataSourceOpInput(name="TestFileOut2", pathkey="default", datakey=None), "tests/data/testfile.txt")  # data source name
 
     # copy one data source to another
     action.copy(
