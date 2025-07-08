@@ -1,6 +1,7 @@
 data/
 env_files/*
 !env_files/plugin.local.env
+!env_files/ffrd.plugin.local.env
 .DS_Store
 
 # User-specific config files and caches
