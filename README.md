@@ -4,8 +4,9 @@
 
 ## Workflow
 
-1. Clone cc-py-sdk from USACE so that it will be in the same directory as this repo.
-    This local version will allow developing on both the SDK and plugin.
+### 1. Clone the SDK
+
+Clone `cc-py-sdk` from USACE into the **same parent directory** as this repo. This allows you to develop both the SDK and plugin in tandem.
 
 ```graphql
 parent-folder/
@@ -26,44 +27,71 @@ parent-folder/
 git clone https://github.com/USACE/cc-py-sdk
 ````
 
-2. Add execution permission to `compose.sh`
+---
+
+### 2. Make `compose.sh` Executable
 ```bash
 chmod u+x compose.sh
 ```
 
-3. Setup mock local s3 and mqtt services
+---
+
+### 3. Start Local Infrastructure
 ```bash
 ./compose.sh infras-up
 ```
 
-4. Setup local S3
+---
 
-- Go to the minio console `http://localhost:9000`
-- Create a bucket named `ccstore`
-- generate a GUID or use a sample like this one: `8cf898dd-bda6-4993-87b6-f281539b26a7`
-- Create a path in that bucket using the guid you are using `cc_store/{Your GUID}`
-   - for example, using the sample guid above, the path would be `cc_store/8cf898dd-bda6-4993-87b6-f281539b26a7`
-- upload your sample payload into that path
-   - using the same example, the object key would be `cc_store/8cf898dd-bda6-4993-87b6-f281539b26a7/payload`
+### 4. Setup Local S3 for DAG Payload
 
-4. Develop system plugin in `plugin/` or modify the SDK in `../../cc-py-sdk/src/cc`.
+1. Open the MinIO console at [http://localhost:9000](http://localhost:9000).
+2. Create a bucket named `ccstore`.
+3. Generate a GUID (or use this sample: `8cf898dd-bda6-4993-87b6-f281539b26a7`).
+4. Create a path in the bucket:
+   `cc_store/{your-GUID}`
+   Example: `cc_store/8cf898dd-bda6-4993-87b6-f281539b26a7`
+5. Upload your sample payload to that path using the object key:
+   `cc_store/{your-GUID}/payload`
+   > 🔒 The object key must be exactly `payload`, **not** `payload.json`.
 
-- The entry to the plugin must be `plugin/main.py`
+---
 
-5. Test plugin using container
+### 5. Develop Your Plugin
+
+- Develop your plugin in the `plugin/` directory.
+- Optionally modify the SDK in `../cc-py-sdk/src/cc`.
+- The plugin's entry point must be: `plugin/main.py`.
+
+---
+
+### (Optional) 5a. Setup Local S3 for FFRD Data
+
+1. Open the MinIO console at [http://localhost:9000](http://localhost:9000).
+2. Create a bucket named `ffrd`.
+3. Upload the following files to:
+   `ffrd/model-library/ffrd-store/`
+   - `hw.txt`
+   - `hwout.ttx`
+
+---
+
+### 6. Test the Plugin
+
+**Run the plugin container:**
 
 ```bash
 ./compose.sh plugin-up
 ```
 
-(Optional) Test plugin using VSCode Debugger
+### 7. Connect VSCode to the container
 
-6. Run the plugin in interactive mode
-
-```bash
-./compose.sh plugin-it-up
+```plaintext
+Dev Containers: Attach to Running Container...
 ```
 
-7. Connect VSCode to the container
+---
 
-`Dev Containers: Attach to Running Container...`
+## 📚 References
+
+- [Directed Acyclic Graph (DAG) – Wikipedia](https://en.wikipedia.org/wiki/Directed_acyclic_graph)
