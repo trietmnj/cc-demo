@@ -1,10 +1,9 @@
-version: "3.9"
-
+# docker-compose/docker-compose.plugin.yaml
 services:
   cc-plugin:
     build:
-      context: .
-      dockerfile: ../plugin/Dockerfile
+      context: ../
+      dockerfile: plugin/Dockerfile
     container_name: cc-plugin
     env_file:
       - ../env_files/plugin.local.env
