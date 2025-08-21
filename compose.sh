@@ -63,9 +63,10 @@ do
 
         "plugin-it-up")
             shift
-            detach_option=""; if [ "$1" = "-d" ]; then detach_option=$1; shift; fi
-            cmd="docker compose -f $COMPOSE_PLUGIN_IT_PATH -p cc-plugin up --remove-orphans $detach_option --build $@"
-            echo -e "$cmd"
+            # detach_option=""; if [ "$1" = "-d" ]; then detach_option=$1; shift; fi
+            # cmd="docker compose -f $COMPOSE_PLUGIN_IT_PATH -p cc-plugin up --remove-orphans $detach_option --build $@"
+            # echo -e "$cmd"
+            echo './compose.sh plugin-it-up does not currently work'
             $cmd
             ;;
         "plugin-it-down")

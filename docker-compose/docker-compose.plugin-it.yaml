@@ -1,5 +1,6 @@
-# docker-compose/docker-compose.plugin.yaml
+# docker-compose/docker-compose.plugin-it.yaml
 services:
+
   cc-plugin:
     build:
       context: ../
@@ -15,3 +16,36 @@ services:
     stdin_open: true
     tty: true
     command: ["/bin/bash"]
+    networks:
+      - cc-demo-net
+    depends_on:
+      cc-plugin-init:
+        condition: service_completed_successfully
+
+  cc-plugin-init:
+    image: minio/mc:latest
+    networks:
+      - cc-demo-net
+    volumes:
+      - ../seed/payloads/payload:/payload:ro
+      - ../seed/ffrd:/ffrd:ro
+    entrypoint:
+      - /bin/sh
+      - -eux
+      - -c
+      - >
+        test -f /payload;
+        mc alias set minio http://minio:9000 ccuser ccpassword;
+        mc mb --ignore-existing minio/ccstore;
+        mc anonymous set download minio/ccstore;
+        mc cp /payload "minio/ccstore/cc_store/8cf898dd-bda6-4993-87b6-f281539b26a7/payload";
+        mc mb --ignore-existing minio/ffrd;
+        mc cp /ffrd/hw.txt "minio/ffrd/model-library/ffrd-store/hw.txt";
+        mc cp /ffrd/hwout.txt "minio/ffrd/model-library/ffrd-store/hwout.txt";
+        mc ls --recursive --summarize "minio/ccstore" || true;
+        mc ls --recursive --summarize "minio/ffrd" || true;
+        exit 0
+
+networks:
+  cc-demo-net:
+    external: true
