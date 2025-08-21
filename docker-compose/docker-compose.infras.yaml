@@ -1,20 +1,39 @@
 # docker-compose/docker-compose.infras.yaml
 services:
+
   mqtt:
     image: eclipse-mosquitto
     ports:
       - 1883:1883
     volumes:
       - ../config:/mosquitto/config
+
   s3:
-    image: minio/minio
+    image: minio/minio:latest
     ports:
-      - "9000:9000"
-      - "9001:9001"
+      - "7123:9000"   # S3 API
+      - "9001:9001"   # Console
     volumes:
-      - ../data/s3:/data
+      - s3data:/data
     environment:
       MINIO_ROOT_USER: ccuser
       MINIO_ROOT_PASSWORD: ccpassword
       MINIO_OPTS: "--console-address :9001"
     command: ["server", "/data", "--console-address", ":9001"]
+    networks:
+      cc-demo-net:
+        aliases: [minio]
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:9000/minio/health/ready"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 5s
+
+volumes:
+  s3data:
+
+networks:
+  cc-demo-net:
+    name: cc-demo-net
+    driver: bridge

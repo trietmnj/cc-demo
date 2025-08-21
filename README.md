@@ -43,36 +43,23 @@ chmod u+x compose.sh
 
 ---
 
-### 4. Setup Local S3 for DAG Payload
-
-1. Open the MinIO console at [http://localhost:9000](http://localhost:9000).
-2. Create a bucket named `ccstore`.
-3. Generate a GUID (or use this sample: `8cf898dd-bda6-4993-87b6-f281539b26a7`).
-4. Create a path in the bucket:
-   `cc_store/{your-GUID}`
-   Example: `cc_store/8cf898dd-bda6-4993-87b6-f281539b26a7`
-5. Upload your sample payload to that path using the object key:
-   `cc_store/{your-GUID}/payload`
-   > 🔒 The object key must be exactly `payload`, **not** `payload.json`.
-
----
-
-### 5. Develop Your Plugin
+### 4. Develop Your Plugin
 
 - Develop your plugin in the `plugin/` directory.
 - Optionally modify the SDK in `../cc-py-sdk/src/cc`.
 - The plugin's entry point must be: `plugin/main.py`.
+- The payload can be updated in `seed/payloads/payload`
 
 ---
 
-### (Optional) 5a. Setup Local S3 for FFRD Data
+### (Optional) 5a. Setup Local S3 for access
 
 1. Open the MinIO console at [http://localhost:9000](http://localhost:9000).
-2. Create a bucket named `ffrd`.
-3. Upload the following files to:
-   `ffrd/model-library/ffrd-store/`
-   - `hw.txt`
-   - `hwout.ttx`
+2. Setup up id/secret pair and specify in `ffrd.plugin.local.env` and `ffrd.plugin.env` files:
+   - `CC_AWS_ACCESS_KEY_ID=your_id`
+   - `CC_AWS_SECRET_ACCESS_KEY=your_secret`
+   - `FFRD_AWS_ACCESS_KEY_ID=your_id`
+   - `FFRD_AWS_SECRET_ACCESS_KEY=your_secret`
 
 ---
 

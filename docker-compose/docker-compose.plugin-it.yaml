@@ -15,3 +15,9 @@ services:
     stdin_open: true
     tty: true
     command: ["/bin/bash"]
+    networks:
+      - cc-demo-net
+
+networks:
+  cc-demo-net:
+    external: true
