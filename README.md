@@ -52,18 +52,7 @@ chmod u+x compose.sh
 
 ---
 
-### (Optional) 5a. Setup Local S3 for access
-
-1. Open the MinIO console at [http://localhost:9000](http://localhost:9000).
-2. Setup up id/secret pair and specify in `ffrd.plugin.local.env` and `ffrd.plugin.env` files:
-   - `CC_AWS_ACCESS_KEY_ID=your_id`
-   - `CC_AWS_SECRET_ACCESS_KEY=your_secret`
-   - `FFRD_AWS_ACCESS_KEY_ID=your_id`
-   - `FFRD_AWS_SECRET_ACCESS_KEY=your_secret`
-
----
-
-### 6. Test the Plugin
+### 5. Test the Plugin
 
 **Run the plugin container:**
 
@@ -71,7 +60,7 @@ chmod u+x compose.sh
 ./compose.sh plugin-up
 ```
 
-### (Optional) 6a. Connect VSCode to the container
+### (Optional) 5a. Connect VSCode to the container
 
 Start the plugin container in interactive mode
 
@@ -83,6 +72,7 @@ Then connect to the container using VSCode
 
 ```plaintext
 > Dev Containers: Attach to Running Container...
+> /cc-plugin
 ```
 
 ---
