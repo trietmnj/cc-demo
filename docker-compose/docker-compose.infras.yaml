@@ -9,7 +9,7 @@ services:
       - ../config:/mosquitto/config
 
   s3:
-    image: minio/minio:latest
+    image: minio/minio:RELEASE.2025-04-08T15-41-24Z
     ports:
       - "7123:9000"   # S3 API
       - "9001:9001"   # Console
