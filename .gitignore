@@ -24,3 +24,4 @@ tests/*
 !tests/ffrd/
 tests/data/*
 !tests/data/
+!tests/data/.gitkeep
