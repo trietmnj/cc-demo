@@ -22,7 +22,9 @@ services:
     command: ["server", "/data", "--console-address", ":9001"]
     networks:
       cc-demo-net:
-        aliases: [minio]
+        aliases: [cc-minio]
+      chart:
+        aliases: [cc-minio]
     healthcheck:
       test: ["CMD", "curl", "-fsS", "http://localhost:9000/minio/health/ready"]
       interval: 5s
