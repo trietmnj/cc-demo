@@ -12,7 +12,7 @@ services:
     image: minio/minio:RELEASE.2025-04-08T15-41-24Z
     ports:
       - "7123:9000"   # S3 API
-      - "9001:9001"   # Console
+      - "9002:9001"   # Console
     volumes:
       - s3data:/data
     environment:
@@ -37,3 +37,5 @@ networks:
   cc-demo-net:
     name: cc-demo-net
     driver: bridge
+  chart:
+    external: true
