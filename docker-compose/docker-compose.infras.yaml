@@ -22,7 +22,7 @@ services:
     command: ["server", "/data", "--console-address", ":9001"]
     networks:
       cc-demo-net:
-        aliases: [cc-minio]
+        aliases: [minio]
       chart:
         aliases: [cc-minio]
     healthcheck:
