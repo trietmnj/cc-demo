@@ -12,7 +12,7 @@ services:
     image: minio/minio:RELEASE.2025-04-08T15-41-24Z
     ports:
       - "7123:9000"   # S3 API
-      - "9001:9001"   # Console
+      - "9002:9001"   # Console
     volumes:
       - s3data:/data
     environment:
@@ -23,6 +23,8 @@ services:
     networks:
       cc-demo-net:
         aliases: [minio]
+      chart:
+        aliases: [cc-minio]
     healthcheck:
       test: ["CMD", "curl", "-fsS", "http://localhost:9000/minio/health/ready"]
       interval: 5s
@@ -37,3 +39,5 @@ networks:
   cc-demo-net:
     name: cc-demo-net
     driver: bridge
+  chart:
+    external: true
