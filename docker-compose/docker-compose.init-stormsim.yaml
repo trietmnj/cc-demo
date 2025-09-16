@@ -1,0 +1,28 @@
+# docker-compose/docker-compose.plugin-it.yaml
+services:
+
+  cc-stormsim-init:
+    image: minio/mc:latest
+    networks:
+      - cc-demo-net
+    volumes:
+      - ../seed/stormsim-mock-plugin:/seed:ro
+    entrypoint:
+      - /bin/sh
+      - -eux
+      - -c
+      - >
+        test -f /seed/nsi_2022_12.gpkg;
+        test -f /seed/CHS-SACS_FL_PCHA_Nodal_Inundation_Depth_Blended_SLC0_BE_vOct2023_OneHundred_grid.tif;
+        mc alias set minio http://minio:9000 ccuser ccpassword;
+        mc mb --ignore-existing minio/stormsim;
+        mc anonymous set download minio/stormsim;
+        mc cp /seed/nsi_2022_12.gpkg "minio/stormsim/mock-plugin/nsi_2022_12.gpkg";
+        mc cp /seed/CHS-SACS_FL_PCHA_Nodal_Inundation_Depth_Blended_SLC0_BE_vOct2023_OneHundred_grid.tif "minio/stormsim/mock-plugin/CHS-SACS_FL_PCHA_Nodal_Inundation_Depth_Blended_SLC0_BE_vOct2023_OneHundred_grid.tif";
+        mc mb --ignore-existing minio/ffrd;
+        mc ls --recursive --summarize "minio/stormsim" || true;
+        exit 0
+
+networks:
+  cc-demo-net:
+    external: true
