@@ -18,5 +18,5 @@ Initialize the dataset:
 From the project root (the directory containing both `cc-demo` and `cc-py-sdk`):
 
 ```bash
-docker build -f cc-demo/stormsim-mock-plugin/export.Dockerfile   -t cc-stormsim-plugin-test .
+docker build -f cc-demo/stormsim-mock-plugin/export.Dockerfile -t cc-stormsim-plugin-test .
 ```
