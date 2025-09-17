@@ -1,4 +1,4 @@
-# docker-compose/docker-compose.plugin-it.yaml
+# docker-compose/docker-compose.init-stormsim.yaml
 services:
 
   cc-stormsim-init:
