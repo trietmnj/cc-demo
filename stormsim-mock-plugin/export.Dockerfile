@@ -11,7 +11,7 @@ COPY cc-demo/stormsim-mock-plugin/ /app
 COPY cc-py-sdk/src/cc/ /app/cc/
 
 # Install python dependencies
-COPY stormsim-mock-plugin/plugin/requirements.txt /tmp/requirements.txt
+COPY cc-demo/stormsim-mock-plugin/requirements.txt /tmp/requirements.txt
 RUN pip install --upgrade pip && \
 pip install -r /tmp/requirements.txt
 
