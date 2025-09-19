@@ -15,4 +15,4 @@ COPY cc-demo/stormsim-mock-plugin/requirements.txt /tmp/requirements.txt
 RUN pip install --upgrade pip && \
 pip install -r /tmp/requirements.txt
 
-CMD ["python", "plugin/main.py"]
+CMD ["python", "app/main.py"]
