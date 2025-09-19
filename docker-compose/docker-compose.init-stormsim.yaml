@@ -17,7 +17,7 @@ services:
         mc alias set minio http://minio:9000 ccuser ccpassword;
         mc mb --ignore-existing minio/stormsim;
         mc anonymous set download minio/stormsim;
-        mc cp /seed/nsi_2022_12.gpkg "minio/stormsim/mock-plugin/nsi_2022_12.gpkg";
+        mc cp /seed/nsi_2022_13.gpkg "minio/stormsim/mock-plugin/nsi_2022_13.gpkg";
         mc cp /seed/CHS-SACS_GA_PCHA_Nodal_Inundation_Depth_Blended_SLC0_BE_vOct2023_OneHundred_grid.tif "minio/stormsim/mock-plugin/CHS-SACS_GA_PCHA_Nodal_Inundation_Depth_Blended_SLC0_BE_vOct2023_OneHundred_grid.tif";
         mc ls --recursive --summarize "minio/stormsim" || true;
         exit 0
