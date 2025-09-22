@@ -13,6 +13,7 @@ cd "$parent_path"
 COMPOSE_INFRAS_PATH="docker-compose/docker-compose.infras.yaml"
 COMPOSE_PLUGIN_PATH="docker-compose/docker-compose.plugin.yaml"
 COMPOSE_PLUGIN_IT_PATH="docker-compose/docker-compose.plugin-it.yaml"
+COMPOSE_STORMSIM_INIT="docker-compose/docker-compose.init-stormsim.yaml"
 
 
 for arg in "$@"
@@ -72,6 +73,14 @@ do
         "plugin-it-down")
             shift
             cmd="docker compose -f $COMPOSE_PLUGIN_IT_PATH -p cc-plugin down --remove-orphans $@"
+            echo -e "$cmd"
+            $cmd
+            ;;
+
+        "init-stormsim")
+            shift
+            detach_option=""; if [ "$1" = "-d" ]; then detach_option=$1; shift; fi
+            cmd="docker compose -f $COMPOSE_STORMSIM_INIT -p cc-stormsim-init up --remove-orphans $detach_option --build $@"
             echo -e "$cmd"
             $cmd
             ;;
