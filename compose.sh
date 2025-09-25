@@ -84,6 +84,13 @@ do
             echo -e "$cmd"
             $cmd
             ;;
+        "init-stormsim-down")
+            shift
+            cmd="docker compose -f $COMPOSE_STORMSIM_INIT -p cc-stormsim-init down --remove-orphans $@"
+            echo -e "$cmd"
+            $cmd
+            ;;
+
 
         "watch")
             shift
