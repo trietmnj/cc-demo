@@ -7,7 +7,7 @@ on:
 jobs:
   xfer:
     runs-on: ubuntu-latest
-    if: github.repository == 'YOURORG/cc-demo'
+    if: github.repository == 'trietmnj/cc-demo'
     permissions:
       issues: write
       contents: read
@@ -17,7 +17,7 @@ jobs:
         with:
           github-token: ${{ secrets.ISSUE_XFER_TOKEN }}
           script: |
-            const owner = 'YOURORG';
+            const owner = 'trietmnj';
             const targetRepo = 'usace-docs';
             try {
               const r = await github.request('GET /repos/{owner}/{repo}', {
@@ -36,7 +36,7 @@ jobs:
         with:
           github-token: ${{ secrets.ISSUE_XFER_TOKEN }}
           script: |
-            const owner = 'YOURORG';
+            const owner = 'trietmnj';
             const sourceRepo = 'cc-demo';
             const targetRepo = 'usace-docs';
             const issue = context.payload.issue;
@@ -68,7 +68,7 @@ jobs:
         with:
           github-token: ${{ secrets.ISSUE_XFER_TOKEN }}
           script: |
-            const owner = 'YOURORG';
+            const owner = 'trietmnj';
             const sourceRepo = 'cc-demo';
             const targetRepo = 'usace-docs';
             const issue = context.payload.issue;
@@ -104,7 +104,7 @@ jobs:
         with:
           github-token: ${{ secrets.ISSUE_XFER_TOKEN }}
           script: |
-            const owner = 'YOURORG';
+            const owner = 'trietmnj';
             const sourceRepo = 'cc-demo';
             const issue = context.payload.issue;
 
@@ -138,7 +138,7 @@ jobs:
         with:
           github-token: ${{ secrets.ISSUE_XFER_TOKEN }}
           script: |
-            const owner = 'YOURORG';
+            const owner = 'trietmnj';
             const sourceRepo = 'cc-demo';
             const issue = context.payload.issue;
 
