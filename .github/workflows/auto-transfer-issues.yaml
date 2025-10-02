@@ -1,0 +1,53 @@
+name: Auto-transfer issues to usace-docs
+
+on:
+  issues:
+    types: [opened]   # you can add 'reopened' if you want
+
+jobs:
+  transfer:
+    if: github.repository == 'trietmnj/cc-demo'
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write         # write issues in source repo
+      contents: read
+    steps:
+      - name: Transfer to usace-docs (opt-out label supported)
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.ISSUE_XFER_TOKEN }}
+          script: |
+            const org = 'trietmnj';
+            const sourceRepo = 'cc-demo';
+            const targetRepo = 'usace-docs';
+            const issue = context.payload.issue;
+
+            // Optional: let maintainers stop transfer by adding a label
+            const OPT_OUT_LABEL = 'keep-here';
+            if (issue.labels?.some(l => l.name === OPT_OUT_LABEL)) {
+              core.info(`Found '${OPT_OUT_LABEL}' label; not transferring.`);
+              return;
+            }
+
+            // Call the Transfer Issue API
+            const res = await github.request(
+              'POST /repos/{owner}/{repo}/issues/{issue_number}/transfer',
+              {
+                owner: org,
+                repo: sourceRepo,
+                issue_number: issue.number,
+                new_repository: `${org}/${targetRepo}`,
+                headers: { accept: 'application/vnd.github+json' },
+              }
+            );
+
+            const newIssueUrl = res.data?.issue?.html_url || '(link unavailable)';
+            core.info(`Transferred #${issue.number} → ${newIssueUrl}`);
+
+            // (Optional) Comment to leave a breadcrumb in the original thread UI
+            await github.request('POST /repos/{owner}/{repo}/issues/{issue_number}/comments', {
+              owner: org,
+              repo: sourceRepo,
+              issue_number: issue.number,
+              body: `This issue was automatically transferred to **${org}/${targetRepo}** → ${newIssueUrl}`,
+            });
