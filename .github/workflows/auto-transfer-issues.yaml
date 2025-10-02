@@ -2,52 +2,105 @@ name: Auto-transfer issues to usace-docs
 
 on:
   issues:
-    types: [opened]   # you can add 'reopened' if you want
+    types: [opened]
 
 jobs:
-  transfer:
-    if: github.repository == 'trietmnj/cc-demo'
+  xfer:
     runs-on: ubuntu-latest
+    if: github.repository == 'trietmnj/cc-demo'
     permissions:
-      issues: write         # write issues in source repo
+      issues: write
       contents: read
     steps:
-      - name: Transfer to usace-docs (opt-out label supported)
+      - name: Preflight: verify token can access target repo
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.ISSUE_XFER_TOKEN }}   # fine-grained PAT
+          script: |
+            const owner = 'trietmnj';
+            const targetRepo = 'usace-docs';
+            try {
+              const r = await github.request('GET /repos/{owner}/{repo}', {
+                owner, repo: targetRepo,
+                headers: { 'X-GitHub-Api-Version': '2022-11-28' }
+              });
+              core.info(`Target repo OK: visibility=${r.data.visibility}, perms=${JSON.stringify(r.data.permissions)}`);
+            } catch (e) {
+              core.setFailed(`Token cannot access ${owner}/${targetRepo}. Ensure PAT has Issues: Read & Write on BOTH repos.`);
+            }
+
+      - name: Transfer via API (skips if label keep-here)
+        id: transfer
+        continue-on-error: true
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.ISSUE_XFER_TOKEN }}
           script: |
-            const org = 'trietmnj';
+            const owner = 'trietmnj';
             const sourceRepo = 'cc-demo';
             const targetRepo = 'usace-docs';
             const issue = context.payload.issue;
 
-            // Optional: let maintainers stop transfer by adding a label
-            const OPT_OUT_LABEL = 'keep-here';
-            if (issue.labels?.some(l => l.name === OPT_OUT_LABEL)) {
-              core.info(`Found '${OPT_OUT_LABEL}' label; not transferring.`);
+            // opt-out label
+            if (issue.labels?.some(l => l.name === 'keep-here')) {
+              core.notice("Found 'keep-here' label; not transferring.");
               return;
             }
 
-            // Call the Transfer Issue API
             const res = await github.request(
               'POST /repos/{owner}/{repo}/issues/{issue_number}/transfer',
               {
-                owner: org,
-                repo: sourceRepo,
-                issue_number: issue.number,
-                new_repository: `${org}/${targetRepo}`,
-                headers: { accept: 'application/vnd.github+json' },
+                owner, repo: sourceRepo, issue_number: issue.number,
+                new_repository: `${owner}/${targetRepo}`,
+                headers: {
+                  accept: 'application/vnd.github+json',
+                  'X-GitHub-Api-Version': '2022-11-28'
+                }
               }
             );
 
-            const newIssueUrl = res.data?.issue?.html_url || '(link unavailable)';
-            core.info(`Transferred #${issue.number} → ${newIssueUrl}`);
+            core.setOutput('new_url', res.data?.issue?.html_url || '');
+            core.info(`Transferred → ${res.data?.issue?.html_url}`);
 
-            // (Optional) Comment to leave a breadcrumb in the original thread UI
-            await github.request('POST /repos/{owner}/{repo}/issues/{issue_number}/comments', {
-              owner: org,
-              repo: sourceRepo,
-              issue_number: issue.number,
-              body: `This issue was automatically transferred to **${org}/${targetRepo}** → ${newIssueUrl}`,
+      - name: Fallback: copy + link + close if transfer 404
+        if: steps.transfer.outcome == 'failure'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.ISSUE_XFER_TOKEN }}
+          script: |
+            const owner = 'trietmnj';
+            const sourceRepo = 'cc-demo';
+            const targetRepo = 'usace-docs';
+            const issue = context.payload.issue;
+
+            core.warning(`Transfer failed (${process.env.STATE_step_summary || 'see logs'}). Falling back to copy.`);
+
+            // Recreate in target
+            const created = await github.request('POST /repos/{owner}/{repo}/issues', {
+              owner, repo: targetRepo,
+              headers: { 'X-GitHub-Api-Version': '2022-11-28' },
+              title: issue.title,
+              body: `${issue.body || ''}\n\n_↪️ Copied from ${owner}/${sourceRepo}#${issue.number}_`
             });
+
+            // Copy labels that exist in target
+            if (issue.labels && issue.labels.length) {
+              const labels = issue.labels.map(l => l.name);
+              try {
+                await github.request('POST /repos/{owner}/{repo}/issues/{issue_number}/labels', {
+                  owner, repo: targetRepo, issue_number: created.data.number, labels,
+                  headers: { 'X-GitHub-Api-Version': '2022-11-28' }
+                });
+              } catch { /* ignore missing labels */ }
+            }
+
+            // Breadcrumb + close source
+            await github.request('POST /repos/{owner}/{repo}/issues/{issue_number}/comments', {
+              owner, repo: sourceRepo, issue_number: issue.number,
+              body: `Auto-moved to **${owner}/${targetRepo}#${created.data.number}** → ${created.data.html_url}`
+            });
+            await github.request('PATCH /repos/{owner}/{repo}/issues/{issue_number}', {
+              owner, repo: sourceRepo, issue_number: issue.number, state: 'closed'
+            });
+
+            core.notice(`Copied to ${created.data.html_url}`);
