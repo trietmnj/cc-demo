@@ -27,3 +27,12 @@ tests/data/*
 !tests/data/.gitkeep
 
 seed/*
+
+*.csv
+scrap.md
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
