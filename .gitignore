@@ -30,3 +30,9 @@ seed/*
 
 *.csv
 scrap.md
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
