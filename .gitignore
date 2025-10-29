@@ -27,3 +27,6 @@ tests/data/*
 !tests/data/.gitkeep
 
 seed/*
+
+*.csv
+scrap.md
