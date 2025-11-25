@@ -71,7 +71,7 @@ Files_to_load =  ['CHS-NA_nodeID_v4.mat', \
 'SRR_TC_MI_600km.mat', \
     'CHS-NA_ITCS_Param.mat', \
         'CHS-NA_ITCS_DSW_600km.mat']
-Files_to_load = [path.join('CHS_Files', f) for f in Files_to_load]
+Files_to_load = [path.join(r'C:\Users\RDCRLHPS\Documents\Chart-Python\CHS_Files', f) for f in Files_to_load]
 # Define CHS-Region
 chs_region = 'CHS-NA'
 # Define Radius Of Influence For Storm Tracks (Intensity Bucket Population)
@@ -147,4 +147,13 @@ else:
     HI_pop = ReducedSet[ReducedSet['Col6'].values>=48]['Col0'].values
 
 print('Tada!')
+
+
+### HAILIE ADDED FOR PULLING THE STORM ID AND PROBABILITIES - OUTPUT CSV TO BE INPUTTED IN LIFECYCLE GENERATOR
+SID=MasterTrack['Param_ITCS']
+SID.columns=['storm_ID', 'Region_ID', 'Track_ID', 'Track_lat', 'Track_lon', 'Heading', 'dP','Rmax' , 'Translational_speed']
+probDSW=DSW['DSW_ITCS']
+probDSW.columns=['DSW']
+SIDprob=pd.concat([SID, probDSW],axis=1)
+SIDprob.to_csv('stormprob.csv', index=False)
 
